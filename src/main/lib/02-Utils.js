@@ -119,8 +119,8 @@ var Utils = {
         return 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(url.replace('#', '%23'));
     },
     editBookmarkCurrent: function(winId) {
-        chrome.tabs.getSelected(winId, function(tabs) {
-            chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tabs.id);
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
+            chrome.extension.getBackgroundPage().Manager.editBookmarkTab(tabs[0].id);
         });
     },
     createElementSimply: function(name, attr) {

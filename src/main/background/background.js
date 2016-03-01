@@ -56,7 +56,9 @@ $.extendWithAccessorProperties(Manager, {
         chrome.tabs.get(tabId, Manager.editBookmarkTab);
     },
     editBookmarkCurrentTab: function() {
-        chrome.tabs.getSelected(null, Manager.editBookmarkTab);
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
+            Manager.editBookmarkTab(tabs[0]);
+        });
     },
     saveBookmarkError: function(data) {
         console.error(data);
@@ -145,10 +147,11 @@ $.extendWithAccessorProperties(Manager, {
         });
     },
     updateCurrentTab: function() {
-        chrome.tabs.getSelected(null, function(t) {
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
+            var tab = tabs[0];
             chrome.windows.getCurrent(function(w) {
-                if (t && w && w.id == t.windowId) {
-                    Manager.updateTab(t);
+                if (tab && w && w.id == tab.windowId) {
+                    Manager.updateTab(tab);
                 }
             });
         });
